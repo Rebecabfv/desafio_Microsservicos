@@ -14,22 +14,22 @@ public class PedidoController {
 
     private final PedidoService service;
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = "application/json")
     public Pedido getPedido (@PathVariable Long id){
         return service.getPedido(id);
     }
 
-    @GetMapping("/allPedidos")
+    @GetMapping(path = "/allPedidos", produces = "application/json")
     public List<Pedido> getAllPedido (){
         return service.getAllPedido();
     }
 
-    @PostMapping
+    @PostMapping (produces = "application/json")
     public void createPedido(@RequestBody Pedido pedido) {
         service.createPedido(pedido);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}", produces = "application/json")
     public void updatePedido(@PathVariable Long id, @RequestBody Pedido pedido){
         service.updatePedido(id,pedido);
     }

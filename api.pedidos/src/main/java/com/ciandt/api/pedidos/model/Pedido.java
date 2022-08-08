@@ -27,5 +27,6 @@ public class Pedido {
     private Status status;
 
     @OneToMany(mappedBy = "pedido")
+    @JsonIgnore
     Set<ItemPedido> itens;
 }
