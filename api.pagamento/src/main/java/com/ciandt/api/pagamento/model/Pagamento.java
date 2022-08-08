@@ -25,11 +25,11 @@ public class Pagamento {
     private BigDecimal valor;
 
     @NotNull
-    @Max(100)
+    @Size(max = 100)
     private String nome;
 
     @NotBlank
-    @Max(100)
+    @Size(max = 100)
     private String numero;
 
     private String expiracao;
