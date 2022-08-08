@@ -1,15 +1,21 @@
 package com.ciandt.api.pedidos.service;
 
+import com.ciandt.api.pedidos.dto.PedidoDto;
+import com.ciandt.api.pedidos.exception.PedidoJaCadastrado;
+import com.ciandt.api.pedidos.exception.PedidoNotFoundException;
 import com.ciandt.api.pedidos.model.Pedido;
+import com.ciandt.api.pedidos.model.Status;
 
 import java.util.List;
 
 public interface PedidoService {
-    Pedido getPedido(Long id);
+    Pedido getPedido(Long id) throws PedidoNotFoundException;
 
     List<Pedido> getAllPedido();
 
-    Pedido createPedido(Pedido pedido);
+    void createPedido(PedidoDto pedidoDto) throws PedidoJaCadastrado;
 
-    Pedido updatePedido(Long id, Pedido pedido);
+    void updatePedido(Long id, PedidoDto pedido) throws PedidoNotFoundException;
+
+    void updateStatusPedido(Long id, Status status) throws PedidoNotFoundException;
 }

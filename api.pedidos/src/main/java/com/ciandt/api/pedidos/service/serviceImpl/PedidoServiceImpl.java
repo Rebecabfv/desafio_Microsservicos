@@ -1,6 +1,10 @@
 package com.ciandt.api.pedidos.service.serviceImpl;
 
+import com.ciandt.api.pedidos.dto.PedidoDto;
+import com.ciandt.api.pedidos.exception.PedidoJaCadastrado;
+import com.ciandt.api.pedidos.exception.PedidoNotFoundException;
 import com.ciandt.api.pedidos.model.Pedido;
+import com.ciandt.api.pedidos.model.Status;
 import com.ciandt.api.pedidos.repository.PedidoRepository;
 import com.ciandt.api.pedidos.service.PedidoService;
 import lombok.RequiredArgsConstructor;
@@ -12,14 +16,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PedidoServiceImpl implements PedidoService {
 
-    //TODO: implement exceptions
     private final PedidoRepository repository;
     @Override
-    public Pedido getPedido(Long id) {
-        var pedidoExist = repository.findById(id);
-        if (pedidoExist.isEmpty())
-            throw new RuntimeException();
-        return pedidoExist.get();
+    public Pedido getPedido(Long id) throws PedidoNotFoundException {
+        return repository.findById(id).orElseThrow(PedidoNotFoundException::new);
     }
 
     @Override
@@ -28,18 +28,37 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public Pedido createPedido(Pedido pedido) {
-        var pedidoExist = repository.findById(pedido.getId());
-        if (pedidoExist.isPresent())
-            throw new RuntimeException();
-        return repository.save(pedido);
+    public void createPedido(PedidoDto pedidoDto) throws PedidoJaCadastrado {
+        var pedido = repository.findById(pedidoDto.getId()).orElseThrow(PedidoJaCadastrado::new);
+
+        repository.save(pedido);
     }
 
     @Override
-    public Pedido updatePedido(Long id, Pedido pedido) {
-        var pedidoExist = repository.findById(id);
-        if (pedidoExist.isEmpty())
-            throw new RuntimeException();
-        return repository.save(pedido);
+    public void updatePedido(Long id, PedidoDto pedidoDto) throws PedidoNotFoundException {
+        repository.findById(id).orElseThrow(PedidoNotFoundException::new);
+
+        var pedidoUpdate = Pedido.builder()
+                .status(pedidoDto.getStatus())
+                .dataHora(pedidoDto.getDataHora())
+                .id(id)
+                .itens(pedidoDto.getItens())
+                .build();
+
+        repository.save(pedidoUpdate);
+    }
+
+    @Override
+    public void updateStatusPedido(Long id, Status status) throws PedidoNotFoundException {
+        var pedidoExist = repository.findById(id).orElseThrow(PedidoNotFoundException::new);
+
+        var pedido = Pedido.builder()
+                .status(status)
+                .dataHora(pedidoExist.getDataHora())
+                .id(id)
+                .itens(pedidoExist.getItens())
+                .build();
+
+        repository.save(pedido);
     }
 }

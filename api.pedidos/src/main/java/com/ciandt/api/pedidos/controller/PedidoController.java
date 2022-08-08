@@ -1,6 +1,10 @@
 package com.ciandt.api.pedidos.controller;
 
+import com.ciandt.api.pedidos.dto.PedidoDto;
+import com.ciandt.api.pedidos.exception.PedidoJaCadastrado;
+import com.ciandt.api.pedidos.exception.PedidoNotFoundException;
 import com.ciandt.api.pedidos.model.Pedido;
+import com.ciandt.api.pedidos.model.Status;
 import com.ciandt.api.pedidos.service.PedidoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +19,7 @@ public class PedidoController {
     private final PedidoService service;
 
     @GetMapping(path = "/{id}", produces = "application/json")
-    public Pedido getPedido (@PathVariable Long id){
+    public Pedido getPedido (@PathVariable Long id) throws PedidoNotFoundException {
         return service.getPedido(id);
     }
 
@@ -25,12 +29,17 @@ public class PedidoController {
     }
 
     @PostMapping (produces = "application/json")
-    public void createPedido(@RequestBody Pedido pedido) {
-        service.createPedido(pedido);
+    public void createPedido(@RequestBody PedidoDto pedidoDto) throws PedidoJaCadastrado {
+        service.createPedido(pedidoDto);
     }
 
     @PutMapping(path = "/{id}", produces = "application/json")
-    public void updatePedido(@PathVariable Long id, @RequestBody Pedido pedido){
-        service.updatePedido(id,pedido);
+    public void updatePedido(@PathVariable Long id, @RequestBody PedidoDto pedidoDto) throws PedidoNotFoundException {
+        service.updatePedido(id,pedidoDto);
+    }
+
+    @PutMapping(path = "/{id}/{status}", produces = "application/json")
+    public void updatePedido(@PathVariable Long id, @RequestBody Status status) throws PedidoNotFoundException {
+        service.updateStatusPedido(id,status);
     }
 }
