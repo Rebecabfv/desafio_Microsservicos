@@ -32,7 +32,7 @@ public class PagamentoController {
     }
 
     @PutMapping("/{id}")
-    public void updatePagamento(@PathVariable Long id, @RequestBody PagamentoDto pagamentoDto){
+    public void updatePagamento(@PathVariable Long id, @RequestBody PagamentoDto pagamentoDto) throws PagamentoNotFoundException {
         service.updatePagamento(id, pagamentoDto);
     }
 
@@ -40,5 +40,4 @@ public class PagamentoController {
     public void deletePagamento(@PathVariable Long id) throws PagamentoNotFoundException {
         service.deletePagamento(id);
     }
-
 }

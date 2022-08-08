@@ -46,11 +46,13 @@ public class PagamentoServiceImpl implements PagamentoService {
     }
 
     @Override
-    public void updatePagamento(Long id, PagamentoDto pagamentoDto) {
+    public void updatePagamento(Long id, PagamentoDto pagamentoDto) throws PagamentoNotFoundException {
         checkArgument(id > 0);
         checkNotNull(pagamentoDto);
 
-        final Pagamento pagamento = Pagamento.builder()
+        final var pagamentoExiste = repository.findById(id).orElseThrow(() -> new PagamentoNotFoundException("Pagamento nao encontrado"));
+
+        final Pagamento pagamento = pagamentoExiste.builder()
                 .nome(pagamentoDto.getNome())
                 .formaDePagamento(pagamentoDto.getFormaDePagamento())
                 .codigo(pagamentoDto.getCodigo())

@@ -11,7 +11,7 @@ public interface PagamentoService {
 
     void savePagamento(PagamentoDto pagamentoDto);
 
-    void updatePagamento(Long id, PagamentoDto pagamentoDto);
+    void updatePagamento(Long id, PagamentoDto pagamentoDto) throws PagamentoNotFoundException;
 
     void deletePagamento(Long id) throws PagamentoNotFoundException;
 
