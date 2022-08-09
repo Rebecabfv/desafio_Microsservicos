@@ -29,9 +29,11 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public void createPedido(PedidoDto pedidoDto) throws PedidoJaCadastrado {
-        var pedido = repository.findById(pedidoDto.getId()).orElseThrow(PedidoJaCadastrado::new);
+        var pedido = repository.findById(pedidoDto.getId());
+        if (pedido.isPresent())
+         throw new PedidoJaCadastrado();
 
-        repository.save(pedido);
+        repository.save(pedido.get());
     }
 
     @Override
