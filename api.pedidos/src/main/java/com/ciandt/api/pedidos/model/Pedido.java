@@ -24,6 +24,7 @@ public class Pedido {
     @Column(name = "data_hora")
     private LocalDateTime dataHora;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @OneToMany(mappedBy = "pedido")

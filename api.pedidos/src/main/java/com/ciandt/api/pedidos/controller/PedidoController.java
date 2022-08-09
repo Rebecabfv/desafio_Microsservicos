@@ -39,7 +39,7 @@ public class PedidoController {
     }
 
     @PutMapping(path = "/{id}/{status}", produces = "application/json")
-    public void updatePedido(@PathVariable Long id, @RequestBody Status status) throws PedidoNotFoundException {
+    public void updateStatusPedido(@PathVariable Long id, @PathVariable Status status) throws PedidoNotFoundException {
         service.updateStatusPedido(id,status);
     }
 }
