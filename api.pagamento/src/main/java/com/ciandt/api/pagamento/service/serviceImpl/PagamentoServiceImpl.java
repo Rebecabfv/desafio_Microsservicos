@@ -26,14 +26,14 @@ public class PagamentoServiceImpl implements PagamentoService {
     @Override
     public Pagamento getPagamento(Long id) throws PagamentoNotFoundException {
 
-        checkArgument(id > 0);
+        checkArgument(id > 0, "Id precisa ser maior que zero");
 
         return repository.findById(id).orElseThrow(() -> new PagamentoNotFoundException("Pagamento nao encontrado"));
     }
 
     @Override
     public void savePagamento(PagamentoDto pagamentoDto) {
-        checkNotNull(pagamentoDto);
+        checkNotNull(pagamentoDto, "Pagamento nao pode ser null");
 
         final Pagamento pagamento = Pagamento.builder()
                 .nome(pagamentoDto.getNome())
@@ -53,15 +53,15 @@ public class PagamentoServiceImpl implements PagamentoService {
     }
 
     private void updateStatusPedido(Pagamento pagamento) {
-        checkNotNull(pagamento.getStatus());
+        checkNotNull(pagamento.getStatus(), "Status nao pode ser null");
         if (Status.CONFIRMADO.equals(pagamento.getStatus()))
             pedidoService.modificarStatusPedido(pagamento.getPedidoId(), pagamento.getStatus());
     }
 
     @Override
     public void updatePagamento(Long id, PagamentoDto pagamentoDto) throws PagamentoNotFoundException {
-        checkArgument(id > 0);
-        checkNotNull(pagamentoDto);
+        checkArgument(id > 0, "Id precisa ser maior que zero");
+        checkNotNull(pagamentoDto, "Pagamento nao pode ser null");
 
         final var pagamentoExiste = repository.findById(id).orElseThrow(() -> new PagamentoNotFoundException("Pagamento nao encontrado"));
         
@@ -84,7 +84,7 @@ public class PagamentoServiceImpl implements PagamentoService {
 
     @Override
     public void deletePagamento(Long id) throws PagamentoNotFoundException {
-        checkArgument(id > 0);
+        checkArgument(id > 0, "Id precisa ser maior que zero");
 
         final var pagamento = repository.findById(id).orElseThrow(() -> new PagamentoNotFoundException("Pagamento nao encontrado"));
 
