@@ -3,8 +3,10 @@ package com.ciandt.api.pagamento.service.serviceImpl;
 import com.ciandt.api.pagamento.dto.PagamentoDto;
 import com.ciandt.api.pagamento.exception.PagamentoNotFoundException;
 import com.ciandt.api.pagamento.model.Pagamento;
+import com.ciandt.api.pagamento.model.Status;
 import com.ciandt.api.pagamento.repository.PagamentoRepository;
 import com.ciandt.api.pagamento.service.PagamentoService;
+import com.ciandt.api.pagamento.service.PedidoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +19,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Service
 public class PagamentoServiceImpl implements PagamentoService {
 
+    private final PedidoService pedidoService;
+
     private final PagamentoRepository repository;
+    
     @Override
     public Pagamento getPagamento(Long id) throws PagamentoNotFoundException {
 
@@ -43,6 +48,14 @@ public class PagamentoServiceImpl implements PagamentoService {
                 .build();
 
         repository.save(pagamento);
+
+        updateStatusPedido(pagamento);
+    }
+
+    private void updateStatusPedido(Pagamento pagamento) {
+        checkNotNull(pagamento.getStatus());
+        if (Status.CONFIRMADO.equals(pagamento.getStatus()))
+            pedidoService.modificarStatusPedido(pagamento.getPedidoId(), pagamento.getStatus());
     }
 
     @Override
@@ -51,7 +64,7 @@ public class PagamentoServiceImpl implements PagamentoService {
         checkNotNull(pagamentoDto);
 
         final var pagamentoExiste = repository.findById(id).orElseThrow(() -> new PagamentoNotFoundException("Pagamento nao encontrado"));
-
+        
         final Pagamento pagamento = pagamentoExiste.builder()
                 .nome(pagamentoDto.getNome())
                 .formaDePagamento(pagamentoDto.getFormaDePagamento())
@@ -65,6 +78,8 @@ public class PagamentoServiceImpl implements PagamentoService {
                 .build();
 
         repository.save(pagamento);
+
+        updateStatusPedido(pagamento);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.ciandt.api.pagamento.controller;
 
+import com.ciandt.api.pagamento.service.PedidoService;
 import com.ciandt.api.pagamento.dto.PagamentoDto;
 import com.ciandt.api.pagamento.exception.PagamentoNotFoundException;
 import com.ciandt.api.pagamento.model.Pagamento;
